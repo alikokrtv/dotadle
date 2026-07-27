@@ -571,6 +571,9 @@ body {
   height: 110px;
   border-radius: 50%;
   border: 3px solid var(--gold);
+  object-fit: cover;
+  box-shadow: 0 0 25px rgba(200, 170, 110, 0.4);
+}
 
 .result-message { margin-bottom: 12px; }
 
