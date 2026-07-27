@@ -276,6 +276,7 @@ function submitGuess(heroId) {
 
   clearInput();
   updateProgress();
+  renderModeClue();
 }
 
 // ─── Give Up ──────────────────────────────────────
