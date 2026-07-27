@@ -107,7 +107,19 @@ const T = {
 const t = (key) => T[LANG.current][key] || key;
 
 // ─── Hero Image Helpers ───────────────────────────
-const heroImg = (id) => `${IMG_BASE}${id}.png`;
+const HERO_IMG_MAP = {
+  wraith_king: 'skeleton_king',
+  windranger: 'windrunner',
+  timbersaw: 'shredder',
+  necrophos: 'necrolyte',
+  natures_prophet: 'furion',
+  outworld_destroyer: 'obsidian_destroyer',
+  zeus: 'zuus',
+  doom: 'doom_bringer',
+  shadow_fiend: 'nevermore',
+  queen_of_pain: 'queenofpain',
+};
+const heroImg = (id) => `${IMG_BASE}${HERO_IMG_MAP[id] || id}.png`;
 const abilityImg = (id) => `${ABILITY_BASE}${id}.png`;
 
 // ─── Legs Map & Helper ─────────────────────────────
