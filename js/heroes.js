@@ -289,10 +289,10 @@ const HEROES = [
     quote:"Silence... is golden.", abilities:["silencer_curse_of_the_silent","silencer_glaives_of_wisdom","silencer_last_word","silencer_global_silence"], emojis:["🤫","💙","📢"] },
   { id:"skywrath_mage", name:"Skywrath Mage", attribute:"Intelligence", attack:"Ranged", roles:["Support","Disabler"], complexity:2, year:2013, gender:"Male",
     lore:"A disgraced skywrath lord whose love was taken by a rival and now rains thunder from above in vengeance.",
-    quote:"My wrath shall rain from the skies!", abilities:["skywrath_mage_arcane_bolt","skywrath_mage_concussive_shot","skywrath_mage_ancient_seal","skywrath_mage_mystic_flare"], emojis:["⚡","🦅","💙"] },
+    quote:"My wrath shall rain from the skies!", abilities:["skywrath_mage_arcane_bolt","skywrath_mage_concussive_shot","skywrath_mage_ancient_seal","skywrath_mage_mystic_flare"], emojis:["🪶","👑","✨"] },
   { id:"storm_spirit", name:"Storm Spirit", attribute:"Intelligence", attack:"Ranged", roles:["Carry","Escape"], complexity:3, year:2013, gender:"Male",
     lore:"A jovial electrified spirit who zips across the map with Ball Lightning and crackles with electricity.",
-    quote:"I'm a little bolt of lightning!", abilities:["storm_spirit_static_remnant","storm_spirit_electric_vortex","storm_spirit_overload","storm_spirit_ball_lightning"], emojis:["⚡","🌩️","🌀"] },
+    quote:"I'm a little bolt of lightning!", abilities:["storm_spirit_static_remnant","storm_spirit_electric_vortex","storm_spirit_overload","storm_spirit_ball_lightning"], emojis:["🌩️","🐼","🌀"] },
   { id:"tinker", name:"Tinker", attribute:"Intelligence", attack:"Ranged", roles:["Carry","Pusher"], complexity:3, year:2013, gender:"Male",
     lore:"A mechanical genius who Rearms all his items from base and fires missiles at every hero on the map.",
     quote:"And the upgrade is complete!", abilities:["tinker_laser","tinker_heat_seeking_missile","tinker_defense_matrix","tinker_rearm"], emojis:["🤖","🚀","🔧"] },
@@ -310,7 +310,7 @@ const HEROES = [
     quote:"De witch doctor is in!", abilities:["witch_doctor_paralyzing_cask","witch_doctor_voodoo_restoration","witch_doctor_maledict","witch_doctor_death_ward"], emojis:["🌿","💀","🎵"] },
   { id:"zuus", name:"Zeus", attribute:"Intelligence", attack:"Ranged", roles:["Support"], complexity:1, year:2013, gender:"Male",
     lore:"The lord of heaven who descends to mortal battlefields to remind everyone of his divine power.",
-    quote:"Know your place, mortal!", abilities:["zuus_arc_lightning","zuus_lightning_bolt","zuus_heavenly_jump","zuus_thundergods_wrath"], emojis:["⚡","👑","☁️"] },
+    quote:"Know your place, mortal!", abilities:["zuus_arc_lightning","zuus_lightning_bolt","zuus_heavenly_jump","zuus_thundergods_wrath"], emojis:["⚡","🌩️","👨‍🦳"] },
 
   // ─────────────────── UNIVERSAL ───────────────────
   { id:"abaddon", name:"Abaddon", attribute:"Universal", attack:"Ranged", roles:["Support","Durable"], complexity:1, year:2013, gender:"Male",
