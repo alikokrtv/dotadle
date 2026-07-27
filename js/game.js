@@ -143,9 +143,34 @@ function decodeHeroId(encoded) {
   } catch { return null; }
 }
 
-// ─── Pick Random Hero ─────────────────────────────
+// ─── Played History Queue (No Repeats) ─────────────
+function getPlayedHistory() {
+  try {
+    return JSON.parse(localStorage.getItem('dotadle_history') || '[]');
+  } catch { return []; }
+}
+
+function recordPlayedHero(id) {
+  const history = getPlayedHistory();
+  if (!history.includes(id)) {
+    history.push(id);
+    if (history.length >= HEROES_UNIQUE.length - 1) {
+      localStorage.setItem('dotadle_history', JSON.stringify([id]));
+    } else {
+      localStorage.setItem('dotadle_history', JSON.stringify(history));
+    }
+  }
+}
+
+// ─── Pick Random Hero (Non-Repeating) ──────────────
 function pickRandomHero(excludeId = null) {
-  const pool = HEROES_UNIQUE.filter(h => h.id !== excludeId);
+  const history = getPlayedHistory();
+  let pool = HEROES_UNIQUE.filter(h => h.id !== excludeId && !history.includes(h.id));
+  if (pool.length === 0) {
+    // If all 120 heroes played, reset pool
+    pool = HEROES_UNIQUE.filter(h => h.id !== excludeId);
+    localStorage.removeItem('dotadle_history');
+  }
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
@@ -635,6 +660,7 @@ function switchMode(newMode) {
   state.gaveUp = false;
   if (!state.challengeMode) {
     state.targetHero = pickRandomHero();
+    recordPlayedHero(state.targetHero.id);
   }
 
   document.getElementById('guess-grid').innerHTML = '';
