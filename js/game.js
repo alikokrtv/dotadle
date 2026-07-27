@@ -115,7 +115,7 @@ const LEGS_MAP = {
   broodmother: 8,
   centaur: 4, leshrac: 4, enchantress: 4, obsidian_destroyer: 4,
   weaver: 6, nyx_assassin: 6, techies: 6,
-  slardar: 0, naga_siren: 0, medusa: 0, morphling: 0, enigma: 0, wisp: 0, viper: 0, venomancer: 0, ancient_apparition: 0,
+  slardar: 0, naga_siren: 0, medusa: 0, morphling: 0, enigma: 0, wisp: 0, io: 0, viper: 0, venomancer: 0, ancient_apparition: 0, razor: 0, death_prophet: 0, nevermore: 0, shadow_demon: 0,
 };
 function getHeroLegs(hero) {
   if (hero.legs !== undefined) return hero.legs;
@@ -312,36 +312,40 @@ function giveUp() {
   showResult(false);
 }
 
-// ─── Show Result ──────────────────────────────────
+// ─── Show Result (3D Hero Card) ───────────────────
 function showResult(won) {
   const panel = document.getElementById('result-panel');
   panel.innerHTML = '';
   panel.classList.add('visible');
 
   const hero = state.targetHero;
+  const legs = getHeroLegs(hero);
+  const tries = state.guesses.length;
 
-  const img = document.createElement('img');
-  img.src = heroImg(hero.id);
-  img.className = 'result-hero-img';
-  img.onerror = () => img.src = '';
-  panel.appendChild(img);
+  const card = document.createElement('div');
+  card.className = 'result-hero-card';
 
-  const msg = document.createElement('div');
-  msg.className = 'result-message';
-  if (won) {
-    const tries = state.guesses.length;
-    msg.innerHTML = `<span class="result-win">${t('solved')}</span><br>
-      <span class="result-tries">${tries} ${tries === 1 ? t('try') : t('tries')}</span>`;
-  } else {
-    msg.innerHTML = `<span class="result-lose">${t('gaveup')}</span><br>
-      <strong class="result-name">${hero.name}</strong>`;
-  }
-  panel.appendChild(msg);
+  card.innerHTML = `
+    <div class="result-card-inner">
+      <div class="result-badge-header">
+        ${won ? `<span class="result-win">🎉 ${t('solved')} (${tries} ${tries === 1 ? t('try') : t('tries')})</span>` : `<span class="result-lose">😔 ${t('gaveup')}</span>`}
+      </div>
+      <div class="result-avatar-wrapper">
+        <img src="${heroImg(hero.id)}" class="result-hero-img" onerror="this.style.display='none'">
+        <span class="hero-attr-badge attr-${hero.attribute.toLowerCase()}">${hero.attribute}</span>
+      </div>
+      <h2 class="result-hero-title">${hero.name}</h2>
+      <div class="result-tags">
+        <span class="tag-pill">${hero.attack}</span>
+        <span class="tag-pill">${hero.roles.join(', ')}</span>
+        <span class="tag-pill">★ ${hero.complexity}</span>
+        <span class="tag-pill">🦵 ${legs} ${t('legs')}</span>
+      </div>
+      <p class="result-lore">"${hero.lore}"</p>
+    </div>
+  `;
 
-  const loreEl = document.createElement('p');
-  loreEl.className = 'result-lore';
-  loreEl.textContent = hero.lore;
-  panel.appendChild(loreEl);
+  panel.appendChild(card);
 
   const btns = document.createElement('div');
   btns.className = 'result-buttons';
@@ -359,6 +363,18 @@ function showResult(won) {
   btns.appendChild(newBtn);
 
   panel.appendChild(btns);
+
+  // 3D Tilt Effect
+  panel.onmousemove = (e) => {
+    const rect = panel.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    panel.style.transform = `perspective(1000px) rotateX(${-y / 15}deg) rotateY(${x / 15}deg) scale(1.02)`;
+  };
+
+  panel.onmouseleave = () => {
+    panel.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+  };
 }
 
 // ─── Share Result ─────────────────────────────────
@@ -573,8 +589,11 @@ function initSearch() {
         activeItem.dispatchEvent(new Event('mousedown'));
       } else {
         const q = input.value.toLowerCase().trim();
-        const exact = HEROES_UNIQUE.find(h => h.name.toLowerCase() === q);
-        if (exact) selectHero(exact.id, exact.name);
+        if (!q) return;
+        const matches = HEROES_UNIQUE.filter(h => h.name.toLowerCase().includes(q));
+        if (matches.length > 0) {
+          selectHero(matches[0].id, matches[0].name);
+        }
       }
     } else if (e.key === 'Escape') {
       dropdown.classList.remove('open');
@@ -607,9 +626,16 @@ function updateProgress() {
   const bar = document.getElementById('progress-bar');
   const label = document.getElementById('progress-label');
   if (!bar) return;
-  const pct = (state.guesses.length / state.maxGuesses) * 100;
+  const current = state.guesses.length;
+  const max = state.maxGuesses;
+  const pct = (current / max) * 100;
   bar.style.width = pct + '%';
-  if (label) label.textContent = `${state.guesses.length} / ${state.maxGuesses}`;
+  if (label) {
+    const isTr = LANG.current === 'tr';
+    label.textContent = current === 0
+      ? (isTr ? '🎯 8 Hak' : '🎯 8 Tries Left')
+      : `🎯 ${isTr ? 'Tahmin' : 'Guess'} ${current} / ${max}`;
+  }
 }
 
 // ─── Toast ─────────────────────────────────────────

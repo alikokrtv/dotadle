@@ -506,29 +506,71 @@ body {
 }
 .result-wrong .cell-value { color: #f87171; }
 
-/* ─── Result Panel ──────────────────────────────── */
+/* ─── Splash Mode Crop Box ──────────────────────── */
+.splash-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.splash-crop-box {
+  width: 360px;
+  height: 220px;
+  max-width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid var(--gold);
+  box-shadow: 0 0 25px rgba(200, 170, 110, 0.3), inset 0 0 20px rgba(0, 0, 0, 0.7);
+  background: #090a0f;
+}
+
+.splash-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
+  display: block;
+}
+
+/* ─── 3D Result Hero Card ───────────────────────── */
 #result-panel {
   display: none;
   margin-top: 24px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 32px 24px;
-  text-align: center;
-  animation: fadeIn 0.4s ease;
-  box-shadow: var(--shadow-lg);
 }
-#result-panel.visible { display: block; }
+#result-panel.visible {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(20, 24, 38, 0.95), rgba(12, 14, 22, 0.98));
+  border: 2px solid var(--gold);
+  border-radius: 16px;
+  padding: 28px 24px;
+  margin-top: 30px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(200, 170, 110, 0.3);
+  transform-style: preserve-3d;
+  transition: transform 0.2s ease-out, box-shadow 0.3s ease;
+}
+
+.result-hero-card {
+  width: 100%;
+  max-width: 440px;
+  text-align: center;
+}
+
+.result-avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  margin: 12px 0;
+}
 
 .result-hero-img {
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
-  object-fit: cover;
   border: 3px solid var(--gold);
-  box-shadow: var(--glow-gold);
-  margin-bottom: 16px;
-}
 
 .result-message { margin-bottom: 12px; }
 
