@@ -447,10 +447,15 @@ function renderModeClue() {
   }
 
   if (mode === 'emoji') {
+    const total = 3;
     const revealed = Math.min(state.guesses.length + 1, hero.emojis.length);
+    const displayList = [];
+    for (let i = 0; i < total; i++) {
+      displayList.push(i < revealed && hero.emojis[i] ? hero.emojis[i] : '❓');
+    }
     const emojiEl = document.createElement('div');
     emojiEl.className = 'emoji-display';
-    emojiEl.textContent = hero.emojis.slice(0, revealed).join('  ');
+    emojiEl.textContent = displayList.join('  ');
     clueBox.appendChild(emojiEl);
     const hint = document.createElement('p');
     hint.className = 'clue-hint';
