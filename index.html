@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dotadle — Guess the Dota 2 Hero</title>
+  <meta name="description" content="Daily Dota 2 hero guessing game. Classic, Splash Art, Ability, Emoji, Lore, and Quote modes. Challenge your friends!">
+  <meta property="og:title" content="Dotadle — Guess the Dota 2 Hero">
+  <meta property="og:description" content="Can you identify the Dota 2 hero from clues? Play with friends in Challenge Mode!">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+</head>
+<body>
+
+  <!-- Language & Stats Buttons (fixed top) -->
+  <div class="top-nav-fixed">
+    <button id="stats-btn" class="btn btn-lang">📊 Stats</button>
+    <button id="lang-btn" class="btn btn-lang">🌐 TR</button>
+  </div>
+
+  <!-- ─── Header ─────────────────────────────── -->
+  <header class="site-header">
+    <div class="header-top">
+      <h1 class="site-title">DOTADLE</h1>
+    </div>
+    <p class="site-subtitle">Guess the Dota 2 Hero</p>
+    <div class="header-actions">
+      <button id="daily-btn" class="btn btn-primary">📅 Today's Hero</button>
+      <button id="newgame-btn" class="btn btn-ghost">🎲 Unlimited Mode</button>
+      <button id="challenge-btn" class="btn btn-secondary">⚔️ Challenge Friend</button>
+      <button id="open-stats-btn" class="btn btn-ghost">📊 Statistics</button>
+    </div>
+  </header>
+
+  <!-- ─── Challenge Banner ─────────────────────── -->
+  <div id="challenge-banner" class="challenge-banner" style="max-width:760px;margin:0 auto 12px;padding:10px 16px;"></div>
+
+  <!-- ─── Mode Tabs ─────────────────────────────── -->
+  <nav class="mode-tabs" role="tablist" aria-label="Game Modes">
+    <button class="mode-tab active" data-mode="classic"  role="tab">⚔️ Classic</button>
+    <button class="mode-tab"        data-mode="splash"   role="tab">🖼️ Splash</button>
+    <button class="mode-tab"        data-mode="ability"  role="tab">⚡ Ability</button>
+    <button class="mode-tab"        data-mode="emoji"    role="tab">😀 Emoji</button>
+    <button class="mode-tab"        data-mode="lore"     role="tab">📖 Lore</button>
+    <button class="mode-tab"        data-mode="quote"    role="tab">🎤 Quote</button>
+  </nav>
+
+  <!-- ─── Main Content ──────────────────────────── -->
+  <main class="main">
+
+    <!-- Mode Clue Box -->
+    <div id="mode-clue" class="mode-clue-box"></div>
+
+    <!-- Search -->
+    <section class="search-section">
+      <div id="search-wrapper">
+        <div class="search-row">
+          <input
+            id="hero-input"
+            type="text"
+            placeholder="Type a hero name..."
+            autocomplete="off"
+            spellcheck="false"
+            aria-label="Hero search"
+          />
+        </div>
+        <div id="hero-dropdown" role="listbox" aria-label="Hero suggestions"></div>
+      </div>
+    </section>
+
+    <!-- Progress -->
+    <div class="progress-section">
+      <div class="progress-track">
+        <div id="progress-bar" class="progress-fill"></div>
+      </div>
+      <div id="progress-label" class="progress-label">0 / 8</div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-row">
+      <button id="giveup-btn" class="btn btn-ghost">🏳️ Give Up</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Guess Grid -->
+    <div class="guess-grid-wrapper">
+      <div id="guess-grid" aria-live="polite" aria-label="Guess results"></div>
+    </div>
+
+    <!-- Result Panel -->
+    <div id="result-panel" role="status"></div>
+
+  </main>
+
+  <!-- ─── Statistics Modal ───────────────────────── -->
+  <div id="stats-modal" class="modal-overlay">
+    <div class="modal-content">
+      <button id="close-stats-btn" class="modal-close">&times;</button>
+      <h2 class="modal-title">📊 Game Statistics</h2>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div id="stat-played" class="stat-num">0</div>
+          <div class="stat-label" data-i18n="played">Played</div>
+        </div>
+        <div class="stat-box">
+          <div id="stat-winpct" class="stat-num">0%</div>
+          <div class="stat-label" data-i18n="winrate">Win Rate</div>
+        </div>
+        <div class="stat-box">
+          <div id="stat-streak" class="stat-num">0</div>
+          <div class="stat-label" data-i18n="curr_streak">Current Streak</div>
+        </div>
+        <div class="stat-box">
+          <div id="stat-maxstreak" class="stat-num">0</div>
+          <div class="stat-label" data-i18n="max_streak">Best Streak</div>
+        </div>
+      </div>
+
+      <h3 class="dist-title" data-i18n="guess_dist">Guess Distribution</h3>
+      <div id="guess-dist-container" class="dist-container"></div>
+
+      <div class="modal-actions">
+        <button id="reset-stats-btn" class="btn btn-ghost">🗑️ Reset Stats</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Scripts ───────────────────────────────── -->
+  <script src="js/heroes.js"></script>
+  <script src="js/game.js"></script>
+
+</body>
+</html>
