@@ -453,6 +453,43 @@ function getSplashCrop(heroId, guessCount) {
   return { originX, originY, scale, blur };
 }
 
+// ─── Canvas Anti-Cheat Splash Drawer ──────────────
+function renderSplashCanvas(hero, guessCount) {
+  const canvas = document.getElementById('splash-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  
+  const width = 360;
+  const height = 220;
+  canvas.width = width;
+  canvas.height = height;
+
+  const crop = getSplashCrop(hero.id, guessCount);
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.src = heroImg(hero.id);
+  
+  img.onload = () => {
+    ctx.clearRect(0, 0, width, height);
+    
+    const scale = parseFloat(crop.scale);
+    const cropW = img.width / scale;
+    const cropH = img.height / scale;
+    const cropX = (img.width - cropW) * (crop.originX / 100);
+    const cropY = (img.height - cropH) * (crop.originY / 100);
+
+    ctx.save();
+    if (parseFloat(crop.blur) > 0) {
+      ctx.filter = `blur(${crop.blur}px) saturate(1.2)`;
+    } else {
+      ctx.filter = `saturate(1.2)`;
+    }
+
+    ctx.drawImage(img, cropX, cropY, cropW, cropH, 0, 0, width, height);
+    ctx.restore();
+  };
+}
+
 // ─── Mode Rendering ───────────────────────────────
 function renderModeClue() {
   const clueBox = document.getElementById('mode-clue');
@@ -469,17 +506,13 @@ function renderModeClue() {
   if (mode === 'splash') {
     const wrapper = document.createElement('div');
     wrapper.className = 'splash-wrapper';
-    const crop = getSplashCrop(hero.id, state.guesses.length);
     wrapper.innerHTML = `
       <div class="splash-reveal">
-        <div class="splash-overlay" oncontextmenu="return false;"></div>
-        <img src="${heroImg(hero.id)}" class="splash-img" 
-             draggable="false" ondragstart="return false;" oncontextmenu="return false;"
-             style="transform-origin: ${crop.originX}% ${crop.originY}%; transform: scale(${crop.scale}); filter: blur(${crop.blur}px) saturate(1.2);" 
-             onerror="this.src=''" />
+        <canvas id="splash-canvas" width="360" height="220" class="splash-canvas" oncontextmenu="return false;"></canvas>
       </div>
       <p class="clue-hint">${t('splash_hint')}</p>`;
     clueBox.appendChild(wrapper);
+    setTimeout(() => renderSplashCanvas(hero, state.guesses.length), 10);
     return;
   }
 
