@@ -227,14 +227,10 @@ body {
 /* Splash Art */
 .splash-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .splash-reveal {
-  width: 240px;
-  height: 240px;
-  overflow: hidden;
-  border-radius: var(--radius-lg);
-  border: 2px solid var(--gold);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
-  box-shadow: var(--shadow-lg), var(--glow-gold);
-  background: #000;
 }
 .splash-img {
   width: 100%;
