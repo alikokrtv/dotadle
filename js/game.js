@@ -513,15 +513,31 @@ function getObfuscatedHeroImage(id, callback) {
   }
 
   const realUrl = heroImg(id);
-  fetch(realUrl)
-    .then(res => res.blob())
+  const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(realUrl)}`;
+
+  fetch(proxyUrl)
+    .then(res => {
+      if (!res.ok) throw new Error('Proxy 1 failed');
+      return res.blob();
+    })
     .then(blob => {
       const blobUrl = URL.createObjectURL(blob);
       HERO_BLOB_CACHE[id] = blobUrl;
       callback(blobUrl);
     })
     .catch(() => {
-      callback(realUrl);
+      // Secondary fallback proxy
+      fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(realUrl)}`)
+        .then(res => res.blob())
+        .then(blob => {
+          const blobUrl = URL.createObjectURL(blob);
+          HERO_BLOB_CACHE[id] = blobUrl;
+          callback(blobUrl);
+        })
+        .catch(() => {
+          // Never expose original URL with hero name in inline style
+          callback('');
+        });
     });
 }
 
