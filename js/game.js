@@ -503,44 +503,6 @@ function renderModeClue() {
     return;
   }
 
-// ─── Obfuscated Hero Image Cache (Anti-Cheat) ────
-const HERO_BLOB_CACHE = {};
-
-function getObfuscatedHeroImage(id, callback) {
-  if (HERO_BLOB_CACHE[id]) {
-    callback(HERO_BLOB_CACHE[id]);
-    return;
-  }
-
-  const realUrl = heroImg(id);
-  const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(realUrl)}`;
-
-  fetch(proxyUrl)
-    .then(res => {
-      if (!res.ok) throw new Error('Proxy 1 failed');
-      return res.blob();
-    })
-    .then(blob => {
-      const blobUrl = URL.createObjectURL(blob);
-      HERO_BLOB_CACHE[id] = blobUrl;
-      callback(blobUrl);
-    })
-    .catch(() => {
-      // Secondary fallback proxy
-      fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(realUrl)}`)
-        .then(res => res.blob())
-        .then(blob => {
-          const blobUrl = URL.createObjectURL(blob);
-          HERO_BLOB_CACHE[id] = blobUrl;
-          callback(blobUrl);
-        })
-        .catch(() => {
-          // Never expose original URL with hero name in inline style
-          callback('');
-        });
-    });
-}
-
   if (mode === 'splash') {
     const wrapper = document.createElement('div');
     wrapper.className = 'splash-wrapper';
@@ -549,19 +511,12 @@ function getObfuscatedHeroImage(id, callback) {
 
     wrapper.innerHTML = `
       <div class="splash-reveal" oncontextmenu="return false;">
-        <div id="splash-bg-element" class="splash-bg" 
-             style="background-position: ${crop.originX}% ${crop.originY}%; background-size: ${bgScale}%; filter: blur(${crop.blur}px) saturate(1.2);"
+        <div class="splash-bg" 
+             style="background-image: url('${heroImg(hero.id)}'); background-position: ${crop.originX}% ${crop.originY}%; background-size: ${bgScale}%; filter: blur(${crop.blur}px) saturate(1.2);"
              oncontextmenu="return false;"></div>
       </div>
       <p class="clue-hint">${t('splash_hint')}</p>`;
     clueBox.appendChild(wrapper);
-
-    getObfuscatedHeroImage(hero.id, (obfuscatedUrl) => {
-      const bgEl = document.getElementById('splash-bg-element');
-      if (bgEl) {
-        bgEl.style.backgroundImage = `url('${obfuscatedUrl}')`;
-      }
-    });
     return;
   }
 
