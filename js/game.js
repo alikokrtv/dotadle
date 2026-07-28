@@ -391,6 +391,11 @@ function showResult(won) {
   panel.onmouseleave = () => {
     panel.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
   };
+
+  // Smoothly scroll to the victory result card
+  setTimeout(() => {
+    panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
 }
 
 // ─── Share Result ─────────────────────────────────
