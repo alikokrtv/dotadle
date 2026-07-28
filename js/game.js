@@ -118,6 +118,9 @@ const HERO_IMG_MAP = {
   doom: 'doom_bringer',
   shadow_fiend: 'nevermore',
   queen_of_pain: 'queenofpain',
+  clockwerk: 'rattletrap',
+  underlord: 'abyssal_underlord',
+  vengefulspirit: 'vengefulspirit',
 };
 const heroImg = (id) => `${IMG_BASE}${HERO_IMG_MAP[id] || id}.png`;
 const abilityImg = (id) => `${ABILITY_BASE}${id}.png`;
@@ -469,7 +472,9 @@ function renderModeClue() {
     const crop = getSplashCrop(hero.id, state.guesses.length);
     wrapper.innerHTML = `
       <div class="splash-reveal">
+        <div class="splash-overlay" oncontextmenu="return false;"></div>
         <img src="${heroImg(hero.id)}" class="splash-img" 
+             draggable="false" ondragstart="return false;" oncontextmenu="return false;"
              style="transform-origin: ${crop.originX}% ${crop.originY}%; transform: scale(${crop.scale}); filter: blur(${crop.blur}px) saturate(1.2);" 
              onerror="this.src=''" />
       </div>
@@ -561,7 +566,12 @@ function initSearch() {
     if (!q) { dropdown.innerHTML = ''; dropdown.classList.remove('open'); return; }
 
     const matches = HEROES_UNIQUE
-      .filter(h => h.name.toLowerCase().includes(q))
+      .filter(h => {
+        const qL = q.toLowerCase();
+        const nameMatch = h.name.toLowerCase().includes(qL);
+        const aliasMatch = h.aliases && h.aliases.some(a => a.toLowerCase().includes(qL));
+        return nameMatch || aliasMatch;
+      })
       .slice(0, 8);
 
     dropdown.innerHTML = '';
