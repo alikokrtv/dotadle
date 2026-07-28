@@ -503,19 +503,49 @@ function renderModeClue() {
     return;
   }
 
+// ─── Obfuscated Hero Image Cache (Anti-Cheat) ────
+const HERO_BLOB_CACHE = {};
+
+function getObfuscatedHeroImage(id, callback) {
+  if (HERO_BLOB_CACHE[id]) {
+    callback(HERO_BLOB_CACHE[id]);
+    return;
+  }
+
+  const realUrl = heroImg(id);
+  fetch(realUrl)
+    .then(res => res.blob())
+    .then(blob => {
+      const blobUrl = URL.createObjectURL(blob);
+      HERO_BLOB_CACHE[id] = blobUrl;
+      callback(blobUrl);
+    })
+    .catch(() => {
+      callback(realUrl);
+    });
+}
+
   if (mode === 'splash') {
     const wrapper = document.createElement('div');
     wrapper.className = 'splash-wrapper';
     const crop = getSplashCrop(hero.id, state.guesses.length);
     const bgScale = (crop.scale * 100).toFixed(0);
+
     wrapper.innerHTML = `
       <div class="splash-reveal" oncontextmenu="return false;">
-        <div class="splash-bg" 
-             style="background-image: url('${heroImg(hero.id)}'); background-position: ${crop.originX}% ${crop.originY}%; background-size: ${bgScale}%; filter: blur(${crop.blur}px) saturate(1.2);"
+        <div id="splash-bg-element" class="splash-bg" 
+             style="background-position: ${crop.originX}% ${crop.originY}%; background-size: ${bgScale}%; filter: blur(${crop.blur}px) saturate(1.2);"
              oncontextmenu="return false;"></div>
       </div>
       <p class="clue-hint">${t('splash_hint')}</p>`;
     clueBox.appendChild(wrapper);
+
+    getObfuscatedHeroImage(hero.id, (obfuscatedUrl) => {
+      const bgEl = document.getElementById('splash-bg-element');
+      if (bgEl) {
+        bgEl.style.backgroundImage = `url('${obfuscatedUrl}')`;
+      }
+    });
     return;
   }
 
