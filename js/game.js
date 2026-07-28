@@ -506,13 +506,16 @@ function renderModeClue() {
   if (mode === 'splash') {
     const wrapper = document.createElement('div');
     wrapper.className = 'splash-wrapper';
+    const crop = getSplashCrop(hero.id, state.guesses.length);
+    const bgScale = (crop.scale * 100).toFixed(0);
     wrapper.innerHTML = `
-      <div class="splash-reveal">
-        <canvas id="splash-canvas" width="360" height="220" class="splash-canvas" oncontextmenu="return false;"></canvas>
+      <div class="splash-reveal" oncontextmenu="return false;">
+        <div class="splash-bg" 
+             style="background-image: url('${heroImg(hero.id)}'); background-position: ${crop.originX}% ${crop.originY}%; background-size: ${bgScale}%; filter: blur(${crop.blur}px) saturate(1.2);"
+             oncontextmenu="return false;"></div>
       </div>
       <p class="clue-hint">${t('splash_hint')}</p>`;
     clueBox.appendChild(wrapper);
-    setTimeout(() => renderSplashCanvas(hero, state.guesses.length), 10);
     return;
   }
 
