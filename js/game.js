@@ -453,7 +453,7 @@ function getSplashCrop(heroId, guessCount) {
   return { originX, originY, scale, blur };
 }
 
-// ─── Canvas Anti-Cheat Splash Drawer ──────────────
+// ─── Canvas Anti-Cheat Splash Drawer (LoLdle Implementation) ───
 function renderSplashCanvas(hero, guessCount) {
   const canvas = document.getElementById('splash-canvas');
   if (!canvas) return;
@@ -466,7 +466,6 @@ function renderSplashCanvas(hero, guessCount) {
 
   const crop = getSplashCrop(hero.id, guessCount);
   const img = new Image();
-  img.crossOrigin = 'anonymous';
   img.src = heroImg(hero.id);
   
   img.onload = () => {
@@ -506,17 +505,13 @@ function renderModeClue() {
   if (mode === 'splash') {
     const wrapper = document.createElement('div');
     wrapper.className = 'splash-wrapper';
-    const crop = getSplashCrop(hero.id, state.guesses.length);
-    const bgScale = (crop.scale * 100).toFixed(0);
-
     wrapper.innerHTML = `
       <div class="splash-reveal" oncontextmenu="return false;">
-        <div class="splash-bg" 
-             style="background-image: url('${heroImg(hero.id)}'); background-position: ${crop.originX}% ${crop.originY}%; background-size: ${bgScale}%; filter: blur(${crop.blur}px) saturate(1.2);"
-             oncontextmenu="return false;"></div>
+        <canvas id="splash-canvas" width="360" height="220" class="canvas-crop" oncontextmenu="return false;"></canvas>
       </div>
       <p class="clue-hint">${t('splash_hint')}</p>`;
     clueBox.appendChild(wrapper);
+    setTimeout(() => renderSplashCanvas(hero, state.guesses.length), 20);
     return;
   }
 

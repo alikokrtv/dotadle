@@ -507,30 +507,27 @@ body {
 }
 .result-wrong .cell-value { color: #f87171; }
 
-/* ─── Splash Mode Crop Box ──────────────────────── */
+/* ─── Splash Mode Canvas (LoLdle Implementation) ─── */
 .splash-reveal {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.canvas-crop {
   width: 360px;
   height: 220px;
   max-width: 100%;
   border-radius: 14px;
-  overflow: hidden;
   border: 2px solid var(--gold);
   box-shadow: 0 0 25px rgba(200, 170, 110, 0.3), inset 0 0 20px rgba(0, 0, 0, 0.7);
   background: #090a0f;
-  margin: 0 auto;
+  display: block;
   user-select: none;
   -webkit-user-select: none;
-}
-
-.splash-bg {
-  width: 100%;
-  height: 100%;
-  background-repeat: no-repeat;
-  transition: background-position 0.6s cubic-bezier(0.25, 1, 0.5, 1), background-size 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
   pointer-events: none;
-  user-select: none;
-  -webkit-user-drag: none;
 }
 
 /* ─── 3D Result Hero Card ───────────────────────── */
