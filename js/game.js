@@ -220,9 +220,10 @@ function compareHeroes(guess, answer) {
 }
 
 // ─── Render Guess Row (Classic) ───────────────────
-function renderGuessRow(guess, comparison, isAnswer = false) {
+function renderGuessRow(guess, comparison) {
+  const isMatch = (guess.id === state.targetHero.id);
   const cells = [
-    { label: 'name', value: guess.name, result: isAnswer ? 'exact' : 'wrong', img: heroImg(guess.id) },
+    { label: 'name', value: guess.name, result: isMatch ? 'exact' : 'wrong', img: heroImg(guess.id) },
     { label: t('attribute'), value: comparison.attribute.text, result: comparison.attribute.result },
     { label: t('attack'),    value: comparison.attack.text,    result: comparison.attack.result },
     { label: t('roles'),     value: comparison.roles.text,     result: comparison.roles.result },
